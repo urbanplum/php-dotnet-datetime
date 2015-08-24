@@ -43,9 +43,10 @@ class FormatToPhpTest extends \PHPUnit_Framework_TestCase
         // test string escaped in both PHP and .net
         $this->assertSame('\d', $this->formatToPhp->convert('\d'));
 
-        // test dontnet quoted strings
+        // test dotnet quoted strings
         $this->assertSame('x\y\l\op\h\o\n\e b\l\ubb\e\r', $this->formatToPhp->convert('"xylophone blubber"'));
         $this->assertSame('x\y\l\op\h\o\n\e b\l\ubb\e\r', $this->formatToPhp->convert("'xylophone blubber'"));
+        $this->assertSame('dmy', $this->formatToPhp->convert("dd''MM''yy"));
 
         // put it all together
         $this->assertSame(

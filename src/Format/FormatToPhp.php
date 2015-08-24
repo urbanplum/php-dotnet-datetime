@@ -10,7 +10,7 @@ class FormatToPhp
 
     const SPECIFIER_CHARACTERS_DOTNET = 'dfFghHKmMstyz:\/';
 
-    const PATTERN_STRING_LITERALS = '/"[^"]*"|(\+)|\'[^\']+\'|(\+)|\\\[%s]|(?![%s])./';
+    const PATTERN_STRING_LITERALS = '/"[^"]*"|\'[^\']*\'|\\\[%s]|[^%s]/';
 
     const PATTERN_SPECIFIERS = '/(([%s](?<!%%s))(\2*))/';
 
