@@ -1,6 +1,6 @@
 # Changelog
 
-All Notable changes to `php-dotnet-datetime` will be documented in this file
+All Notable changes to `dotnet-datetime` will be documented in this file
 
 ## NEXT - YYYY-MM-DD
 

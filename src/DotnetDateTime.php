@@ -1,10 +1,10 @@
 <?php
 
-namespace Urbanplum\PhpDotnetDateTime;
+namespace Urbanplum\DotnetDateTime;
 
-use Urbanplum\PhpDotnetDateTime\Format\FormatToPhp;
+use Urbanplum\DotnetDateTime\Format\FormatToPhp;
 
-class PhpDotnetDateTime
+class DotnetDateTime implements DotnetDateTimeInterface
 {
     /**
      * Convert a .NET custom date format string to it's PHP equivalent.

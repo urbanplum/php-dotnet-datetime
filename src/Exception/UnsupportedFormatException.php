@@ -1,6 +1,6 @@
 <?php
 
-namespace Urbanplum\PhpDotnetDateTime\Exception;
+namespace Urbanplum\DotnetDateTime\Exception;
 
 use \InvalidArgumentException;
 

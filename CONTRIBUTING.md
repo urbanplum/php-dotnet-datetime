@@ -2,7 +2,7 @@
 
 Contributions are **welcome** and will be fully **credited**.
 
-We accept contributions via Pull Requests on [Github](https://github.com/urbanplum/php-dotnet-datetime).
+We accept contributions via Pull Requests on [Github](https://github.com/urbanplum/dotnet-datetime).
 
 
 ## Pull Requests

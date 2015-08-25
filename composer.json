@@ -1,11 +1,18 @@
 {
-    "name": "urbanplum/php-dotnet-datetime",
+    "name": "urbanplum/dotnet-datetime",
     "description": "Tools to convert between .NET and PHP date formats",
     "keywords": [
         "urbanplum",
-        "php-dotnet-datetime"
+        "dotnet-datetime",
+        ".net",
+        "php",
+        "date",
+        "time",
+        "datetime",
+        "format",
+        "converter"
     ],
-    "homepage": "https://github.com/urbanplum/php-dotnet-datetime",
+    "homepage": "https://github.com/urbanplum/dotnet-datetime",
     "license": "MIT",
     "authors": [
         {
@@ -20,17 +27,16 @@
     },
     "require-dev": {
         "phpunit/phpunit" : "4.*",
-        "scrutinizer/ocular": "~1.1",
         "symfony/var-dumper": "~2.7"
     },
     "autoload": {
         "psr-4": {
-            "Urbanplum\\PhpDotnetDateTime\\": "src"
+            "Urbanplum\\DotnetDateTime\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Urbanplum\\PhpDotnetDateTime\\Test\\": "tests"
+            "Urbanplum\\DotnetDateTime\\Test\\": "tests"
         }
     },
     "scripts": {

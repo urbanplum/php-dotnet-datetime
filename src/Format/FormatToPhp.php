@@ -1,8 +1,8 @@
 <?php
 
-namespace Urbanplum\PhpDotnetDateTime\Format;
+namespace Urbanplum\DotnetDateTime\Format;
 
-use Urbanplum\PhpDotnetDateTime\Exception\UnsupportedFormatException;
+use Urbanplum\DotnetDateTime\Exception\UnsupportedFormatException;
 
 class FormatToPhp
 {

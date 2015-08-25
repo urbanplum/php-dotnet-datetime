@@ -1,7 +1,7 @@
 <?php
-namespace Urbanplum\PhpDotnetDateTime\Test\Format;
+namespace Urbanplum\DotnetDateTime\Test\Format;
 
-use Urbanplum\PhpDotnetDateTime\Format\FormatToPhp;
+use Urbanplum\DotnetDateTime\Format\FormatToPhp;
 
 class FormatToPhpTest extends \PHPUnit_Framework_TestCase
 {
