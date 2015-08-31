@@ -12,46 +12,64 @@ class FormatToPhpTest extends \PHPUnit_Framework_TestCase
         $this->formatToPhp = new FormatToPhp();
     }
 
-    public function testConvert()
+    /**
+     * @dataProvider testConvertDataProvider
+     */
+    public function testConvert($phpFormat, $dotnetFormat)
     {
-        // test individual specifiers
-        $this->assertSame('j', $this->formatToPhp->convert('d'));
-        $this->assertSame('d', $this->formatToPhp->convert('dd'));
-        $this->assertSame('D', $this->formatToPhp->convert('ddd'));
-        $this->assertSame('l', $this->formatToPhp->convert('dddd'));
-        $this->assertSame('u', $this->formatToPhp->convert('ffffff'));
-        $this->assertSame('g', $this->formatToPhp->convert('h'));
-        $this->assertSame('h', $this->formatToPhp->convert('hh'));
-        $this->assertSame('G', $this->formatToPhp->convert('H'));
-        $this->assertSame('H', $this->formatToPhp->convert('HH'));
-        $this->assertSame('i', $this->formatToPhp->convert('mm'));
-        $this->assertSame('n', $this->formatToPhp->convert('M'));
-        $this->assertSame('m', $this->formatToPhp->convert('MM'));
-        $this->assertSame('M', $this->formatToPhp->convert('MMM'));
-        $this->assertSame('F', $this->formatToPhp->convert('MMMM'));
-        $this->assertSame('s', $this->formatToPhp->convert('ss'));
-        $this->assertSame('A', $this->formatToPhp->convert('tt'));
-        $this->assertSame('y', $this->formatToPhp->convert('yy'));
-        $this->assertSame('Y', $this->formatToPhp->convert('yyyy'));
+        $this->assertSame($phpFormat, $this->formatToPhp->convert($dotnetFormat));
+    }
 
-        // test .net escaped strings
-        $this->assertSame('K', $this->formatToPhp->convert('\K'));
+    public function testConvertDataProvider()
+    {
+        // php format => .net format
+        return [
+            // individual .net specifiers
+            ['j', 'd'],
+            ['d', 'dd'],
+            ['D', 'ddd'],
+            ['l', 'dddd'],
+            ['u', 'ffffff'],
+            ['g', 'h'],
+            ['h', 'hh'],
+            ['G', 'H'],
+            ['H', 'HH'],
+            ['i', 'mm'],
+            ['n', 'M'],
+            ['m', 'MM'],
+            ['M', 'MMM'],
+            ['F', 'MMMM'],
+            ['s', 'ss'],
+            ['A', 'tt'],
+            ['y', 'yy'],
+            ['Y', 'yyyy'],
 
-        //test PHP specifiers are escaped
-        $this->assertSame('\U', $this->formatToPhp->convert('U'));
+            // escaping .net specifiers for a literal output
+            ['K', '\K'],
 
-        // test string escaped in both PHP and .net
-        $this->assertSame('\d', $this->formatToPhp->convert('\d'));
+            // literal characters in .net are escaped if they are php specifiers
+            ['\U', 'U'],
 
-        // test dotnet quoted strings
-        $this->assertSame('x\y\l\op\h\o\n\e b\l\ubb\e\r', $this->formatToPhp->convert('"xylophone blubber"'));
-        $this->assertSame('x\y\l\op\h\o\n\e b\l\ubb\e\r', $this->formatToPhp->convert("'xylophone blubber'"));
-        $this->assertSame('dmy', $this->formatToPhp->convert("dd''MM''yy"));
+            // escaped .net specifiers are escaped if they are php specifiers
+            ['\d', '\d'],
 
-        // put it all together
-        $this->assertSame(
-            '\t\h\e \d\a\t\e \i\s \n\o\w d-m-y h:i:s / g:i A. \y\e\s \i\t \i\s',
-            $this->formatToPhp->convert('"the date is" now dd-MM-yy hh\:mm\:ss \/ h\:mm tt. \ye\s' . "' it is'")
-        );
+            // dotnet quoted strings
+            ['x\y\l\op\h\o\n\e b\l\ubb\e\r', "'xylophone blubber'"],
+            ['x\y\l\op\h\o\n\e b\l\ubb\e\r', '"xylophone blubber"'],
+
+            // dotnet quoted backslashes are literals
+            ['bb\\\\xx', "'bb\\xx'"],
+            ['bb\\\\xx', '"bb\\xx"'],
+
+            // common separators
+            ['dmy', "dd''MM''yy"],
+            ['d m Y', "dd' 'MM' 'yyyy"],
+            ['d.m.Y', "dd'.'MM'.'yyyy"],
+            ['d,m,Y', "dd','MM','yyyy"],
+            ['d-m-Y', "dd'-'MM'-'yyyy"],
+            ['d\\\\m\\\\Y', "dd'\'MM'\'yyyy"],
+            ['d:m:Y', "dd':'MM':'yyyy"],
+            ['d/m/Y', "dd'/'MM'/'yyyy"]
+        ];
     }
 }

@@ -6,13 +6,13 @@ use Urbanplum\DotnetDateTime\Exception\UnsupportedFormatException;
 
 class FormatToPhp
 {
-    const SPECIFIER_CHARACTERS_PHP = 'dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU';
+    const SPECIFIER_CHARACTERS_DOTNET = 'dfFghHKmMstyz:\/\\\\';
 
-    const SPECIFIER_CHARACTERS_DOTNET = 'dfFghHKmMstyz:\/';
+    const PATTERN_STRING_LITERALS_DOTNET = '/"[^"]*"|\'[^\']*\'|\\\[%s]|[^%s]/';
 
-    const PATTERN_STRING_LITERALS = '/"[^"]*"|\'[^\']*\'|\\\[%s]|[^%s]/';
+    const PATTERN_SPECIFIERS_DOTNET = '/(([%s](?<!%%s))(\2*))/';
 
-    const PATTERN_SPECIFIERS = '/(([%s](?<!%%s))(\2*))/';
+    const PATTERN_SPECIFIERS_PHP = '/[dDjlNSwzWFmMntLoYyaABgGhHisueIOPTZcrU\\\\]/';
 
     /**
      * Maps .NET specifiers to their PHP equivalents.
@@ -60,7 +60,7 @@ class FormatToPhp
         };
 
         $dotnetFormatPlaceholders = preg_replace_callback(
-            $this->getPatternStringLiterals(),
+            $this->getPatternStringLiteralsDotNet(),
             $callback,
             $dotnetFormat
         );
@@ -82,17 +82,35 @@ class FormatToPhp
             $dotnetFormatPlaceholders
         );
 
-        // remove quotes and escape characters from string literals
-        $stringLiterals = str_replace(['"', '\'', '\\'], '', $stringLiterals);
+        // remove slashes from literals
+        $callback = function ($value) {
+            if ($value == '\\') {
+                // don't remove single slashes - these are literal slashes
+                return $value;
+            }
+
+            // slashes within quotes are literal slashes
+            if (preg_match('/^["\'].+["\']$/', $value)) {
+                return $value;
+            }
+
+            $value = stripslashes($value);
+
+            return $value;
+        };
+
+        $stringLiterals = array_map($callback, $stringLiterals);
+
+        // remove quotes from literals
+        $stringLiterals = str_replace(['"', '\''], '', $stringLiterals);
 
         // escape any PHP specifier characters that appear in the string literals
-        $specifierCharactersPhp = $this->getSpecifierCharactersPhp();
+        $callback = function ($matches) {
+            $match = reset($matches);
+            return '\\' . $match;
+        };
 
-        $stringLiterals = str_replace(
-            $specifierCharactersPhp,
-            $this->escapeCharacters($specifierCharactersPhp),
-            $stringLiterals
-        );
+        $stringLiterals = preg_replace_callback($this->getPatternSpecifiersPhp(), $callback, $stringLiterals);
 
         // replace placeholders with string literals
         return vsprintf($phpFormatPlaceholders, $stringLiterals);
@@ -103,41 +121,26 @@ class FormatToPhp
      */
     protected function getPatternSpecifiersDotnet()
     {
-        return sprintf(self::PATTERN_SPECIFIERS, self::SPECIFIER_CHARACTERS_DOTNET);
+        return sprintf(self::PATTERN_SPECIFIERS_DOTNET, self::SPECIFIER_CHARACTERS_DOTNET);
     }
 
     /**
      * @return string
      */
-    protected function getPatternStringLiterals()
+    protected function getPatternStringLiteralsDotNet()
     {
         return sprintf(
-            self::PATTERN_STRING_LITERALS,
+            self::PATTERN_STRING_LITERALS_DOTNET,
             self::SPECIFIER_CHARACTERS_DOTNET,
             self::SPECIFIER_CHARACTERS_DOTNET
         );
     }
 
     /**
-     * @return array
+     * @return string
      */
-    protected function getSpecifierCharactersPhp()
+    protected function getPatternSpecifiersPhp()
     {
-        return str_split(self::SPECIFIER_CHARACTERS_PHP);
-    }
-
-    /**
-     * @param array $characters
-     *
-     * @return array
-     */
-    protected function escapeCharacters(array $characters)
-    {
-        return array_map(
-            function ($character) {
-                return "\\$character";
-            },
-            $characters
-        );
+        return self::PATTERN_SPECIFIERS_PHP;
     }
 }
