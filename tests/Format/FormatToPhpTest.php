@@ -61,6 +61,9 @@ class FormatToPhpTest extends \PHPUnit_Framework_TestCase
             ['bb\\\\xx', "'bb\\xx'"],
             ['bb\\\\xx', '"bb\\xx"'],
 
+            // unquoted escaped backslash
+            ['\\\\', '\\\\'],
+
             // common separators
             ['dmy', "dd''MM''yy"],
             ['d m Y', "dd' 'MM' 'yyyy"],
